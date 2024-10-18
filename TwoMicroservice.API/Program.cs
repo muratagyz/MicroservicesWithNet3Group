@@ -1,5 +1,6 @@
 using MassTransit;
 using TwoMicroservice.API.Consumers;
+using TwoMicroservice.API.Exceptions;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -16,6 +17,20 @@ builder.Services.AddMassTransit(x =>
 
     x.UsingRabbitMq((context, configure) =>
     {
+        configure.UseMessageRetry(r =>
+        {
+            //r.Immediate(5);
+            //r.Incremental(5, TimeSpan.FromSeconds(5), TimeSpan.FromSeconds(5));
+            r.Interval(5, TimeSpan.FromSeconds(5));
+
+            r.Handle<QueueCriticalException>();
+            r.Ignore<QueueNormalException>();
+        });
+
+        configure.UseDelayedRedelivery(x => x.Intervals(TimeSpan.FromHours(1), TimeSpan.FromHours(2)));
+
+        //configure.UseInMemoryOutbox();
+
         var connectionString = builder.Configuration.GetConnectionString("RabbitMQ");
         configure.Host(connectionString);
 

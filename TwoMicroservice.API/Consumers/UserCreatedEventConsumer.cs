@@ -7,6 +7,10 @@ namespace TwoMicroservice.API.Consumers
     {
         public Task Consume(ConsumeContext<UserCreatedEvent> context)
         {
+            Console.WriteLine("Consume methodu çalıştı");
+
+            throw new Exception("hata meydana geldi");
+
             var message = context.Message;
 
             Console.WriteLine($"Sms Gönderildi, UserId={message.UserId}");

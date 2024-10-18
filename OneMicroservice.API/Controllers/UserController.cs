@@ -11,8 +11,25 @@ namespace OneMicroservice.API.Controllers
         [HttpPost]
         public async Task<IActionResult> CreateUser()
         {
-            // user to create
-            await publishEndpoint.Publish(new UserCreatedEvent(Guid.NewGuid(), "muratagyuz@outlook.com", "555 555 55 55"));
+            //Outbox design
+            //Inbox design
+
+            //transaction begin
+            // user to create; Sql server
+            //Outbox(created,message paylaod, status)
+            //transcation end
+
+            // Retry => count,timeout
+
+            CancellationTokenSource cancellationTokenSource = new CancellationTokenSource();
+            cancellationTokenSource.CancelAfter(TimeSpan.FromSeconds(60));
+
+            await publishEndpoint.Publish(new UserCreatedEvent(Guid.NewGuid(), "muratagyuz@outlook.com", "555 555 55 55"),
+                pipile =>
+                {
+                    pipile.SetAwaitAck(true);
+                    pipile.Durable = true;
+                }, cancellationTokenSource.Token);
 
             return Ok();
         }
