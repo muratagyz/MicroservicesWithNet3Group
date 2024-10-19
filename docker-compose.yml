@@ -1,0 +1,16 @@
+version: '3.4'
+
+services:
+  webapplication1:
+    image: webapplication-image
+    container_name: webapplication-container
+    build:
+      context: .
+      dockerfile: WebApplication1/Dockerfile
+
+  webapplication2:
+     image: webapplication2-image
+     container_name: webapplication2-container
+     build:
+       context: .
+       dockerfile: WebApplication2/Dockerfile
