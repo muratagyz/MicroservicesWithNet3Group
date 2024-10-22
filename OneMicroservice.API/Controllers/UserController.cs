@@ -1,13 +1,22 @@
 ﻿using Bus.Shared;
 using MassTransit;
 using Microsoft.AspNetCore.Mvc;
+using OneMicroservice.API.Services;
 
 namespace OneMicroservice.API.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class UserController(IPublishEndpoint publishEndpoint) : ControllerBase
+    public class UserController(IPublishEndpoint publishEndpoint,StockService stockService) : ControllerBase
     {
+        [HttpGet]
+        public async Task<IActionResult> GetStock()
+        {
+            var result = await stockService.GetStockCount();
+
+            return Ok(result);
+        }
+
         [HttpPost]
         public async Task<IActionResult> CreateUser()
         {

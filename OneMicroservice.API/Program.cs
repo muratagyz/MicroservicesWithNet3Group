@@ -1,4 +1,6 @@
 using MassTransit;
+using Microsoft.Extensions.DependencyInjection;
+using OneMicroservice.API.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -16,6 +18,11 @@ builder.Services.AddMassTransit(x =>
         var connectionString = builder.Configuration.GetConnectionString("RabbitMQ");
         configure.Host(connectionString);
     });
+});
+
+builder.Services.AddHttpClient<StockService>(x =>
+{
+    x.BaseAddress = new Uri(builder.Configuration.GetSection("Microservices").GetSection("Stock")["BaseUrl"]!);
 });
 
 var app = builder.Build();
