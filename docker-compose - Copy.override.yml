@@ -1,0 +1,20 @@
+version: '3.4'
+
+services:
+  webapplication1:
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ASPNETCORE_HTTP_PORTS=8080
+      - Microservices:Stock:BaseUrl=http://webapplication2:8080
+      - ConnectionStrings:SqlServer=Server=sqlserver.db,1433;Database=Microservice1new;User Id=sa;Password=Password12*;
+    ports:
+      - "5000:8080"
+  webapplication2:
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ASPNETCORE_HTTP_PORTS=8080
+    ports:
+      - "5001:8080"
+volumes:
+  sqlserver-data-microservice1:
+       

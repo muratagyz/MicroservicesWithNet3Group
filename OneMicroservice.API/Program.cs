@@ -1,5 +1,4 @@
 using MassTransit;
-using Microsoft.Extensions.DependencyInjection;
 using OneMicroservice.API.Services;
 
 var builder = WebApplication.CreateBuilder(args);
